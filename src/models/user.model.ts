@@ -1,4 +1,4 @@
-import { Document, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IUser extends Document {
@@ -31,3 +31,8 @@ userSchema.pre("save", async function (next) {
 });
 
 // Methode pour comparer les mots de passes
+userSchema.methods.comparePassword = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
+
+export const User = model<IUser>("User", userSchema);
